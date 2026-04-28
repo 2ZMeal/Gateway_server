@@ -6,56 +6,63 @@ spring:
     name: api-gateway
   cloud:
     gateway:
-      routes:
-        - id: user-service
-          uri: lb://user-service
-          predicates:
-            - Path=/api/users/**, /api/auth/**, /api/mileage/**
+      server:
+        webflux:
+          routes:
+            - id: user-service
+              uri: lb://user-service
+              predicates:
+                - Path=/api/v1/users/**
 
-        - id: company-service
-          uri: lb://company-service
-          predicates:
-            - Path=/api/companies/**
+            - id: company-service
+              uri: lb://company-service
+              predicates:
+                - Path=/api/v1/companies/**
 
-        - id: product-service
-          uri: lb://product-service
-          predicates:
-            - Path=/api/products/**
+            - id: product-service
+              uri: lb://product-service
+              predicates:
+                - Path=/api/v1/products/**
 
-        - id: cart-service
-          uri: lb://cart-service
-          predicates:
-            - Path=/api/carts/**
+            - id: cart-service
+              uri: lb://cart-service
+              predicates:
+                - Path=/api/v1/carts/**
 
-        - id: order-service
-          uri: lb://order-service
-          predicates:
-            - Path=/api/orders/**
+            - id: order-service
+              uri: lb://order-service
+              predicates:
+                - Path=/api/v1/orders/**
 
-        - id: payment-service
-          uri: lb://payment-service
-          predicates:
-            - Path=/api/payments/**
+            - id: payment-service
+              uri: lb://payment-service
+              predicates:
+                - Path=/api/v1/payments/**
 
-        - id: shipment-service
-          uri: lb://shipment-service
-          predicates:
-            - Path=/api/shipments/**
+            - id: shipment-service
+              uri: lb://shipment-service
+              predicates:
+                - Path=/api/v1/shipments/**
 
-        - id: notification-service
-          uri: lb://notification-service
-          predicates:
-            - Path=/api/notifications/**
+            - id: notification-service
+              uri: lb://notification-service
+              predicates:
+                - Path=/api/v1/notifications/**
 
-        - id: review-service
-          uri: lb://review-service
-          predicates:
-            - Path=/api/reviews/**
+            - id: review-service
+              uri: lb://review-service
+              predicates:
+                - Path=/api/v1/reviews/**
 
-        - id: customer-service
-          uri: lb://customer-service
-          predicates:
-            - Path=/api/cs/**
+            - id: customer-service
+              uri: lb://customer-service
+              predicates:
+                - Path=/api/v1/cs/**
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8180/realms/easymeal/protocol/openid-connect/certs
 
 eureka:
   instance:
@@ -69,11 +76,3 @@ management:
     web:
       exposure:
         include: health, info
-
-# JWT 검증 설정 — 인증 설계 완료 후 keycloak jwk-set-uri 값 채울 것
-# spring:
-#   security:
-#     oauth2:
-#       resourceserver:
-#         jwt:
-#           jwk-set-uri: http://keycloak:8180/realms/sparta/protocol/openid-connect/certs
