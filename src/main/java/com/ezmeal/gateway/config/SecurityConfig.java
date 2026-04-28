@@ -35,6 +35,8 @@ public class SecurityConfig {
                         // 전역 인증 제외
                         .pathMatchers(
                                 "/realms/easymeal/protocol/openid-connect/token",
+                                "/realms/easymeal/protocol/openid-connect/certs",
+                                "/realms/easymeal/.well-known/openid-configuration",
                                 "/api/v1/users/signup/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
@@ -81,7 +83,7 @@ public class SecurityConfig {
 
                 if(rolesObj instanceof Collection<?> roles) {
                     roles.forEach(role ->
-                        authorities.add(new SimpleGrantedAuthority("ROLE_" + role))
+                        authorities.add(new SimpleGrantedAuthority("ROLE_" + role.toString()))
                     );
                 }
             }
