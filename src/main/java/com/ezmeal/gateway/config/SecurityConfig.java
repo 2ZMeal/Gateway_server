@@ -31,6 +31,9 @@ public class SecurityConfig {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+
                 .authorizeExchange(exchange -> exchange
                         // 전역 인증 제외
                         .pathMatchers(
@@ -41,22 +44,15 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
-                        // 특정 api 인증 제외 -------------------------
-                        // product
+                        // 특정 도메인의 일부 api에 대한 인증 제외
                         .pathMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
-                        // review
-                        .pathMatchers(HttpMethod.GET, "/api/v1/reviews/myReviews/**").hasAnyRole("ADMIN", "USER")
-                        .pathMatchers(HttpMethod.GET, "/api/v1/reviews/**").permitAll()
-                        // company
                         .pathMatchers(HttpMethod.GET, "/api/v1/companies/**").permitAll()
-                        // 권한 강제 ----------------------------------
-                        .pathMatchers(HttpMethod.DELETE, "/api/v1/notifications/**").hasRole("ADMIN")
-                        .pathMatchers(HttpMethod.POST, "/api/v1/notifications/**").hasRole("ADMIN")
-                        // test시에 사용하는 uri
+                        .pathMatchers(HttpMethod.GET, "/api/v1/reviews").permitAll()
+                        // test시에 사용하는 api
                         .pathMatchers("/api/v1/test/anonymous").permitAll()
                         .pathMatchers("/api/v1/test/user").authenticated()
                         .pathMatchers("/api/v1/test/admin").hasRole("ADMIN")
-                        // 그 외 모두 인증 요구 -------------------------
+                        // 그 외 모두 인증 요구
                         .anyExchange().authenticated()
                 )
                 // JWT 검증(Keycloak에 위임)
