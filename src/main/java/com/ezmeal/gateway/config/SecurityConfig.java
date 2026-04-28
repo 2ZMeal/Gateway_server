@@ -52,6 +52,10 @@ public class SecurityConfig {
                         // 권한 강제 ----------------------------------
                         .pathMatchers(HttpMethod.DELETE, "/api/v1/notifications/**").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.POST, "/api/v1/notifications/**").hasRole("ADMIN")
+                        // test시에 사용하는 uri
+                        .pathMatchers("/api/v1/test/anonymous").permitAll()
+                        .pathMatchers("/api/v1/test/user").authenticated()
+                        .pathMatchers("/api/v1/test/admin").hasRole("ADMIN")
                         // 그 외 모두 인증 요구 -------------------------
                         .anyExchange().authenticated()
                 )
