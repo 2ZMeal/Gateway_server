@@ -22,6 +22,7 @@ public class JwtHeaderRelayFilter implements GlobalFilter, Ordered {
                 .filter(JwtAuthenticationToken.class::isInstance)
                 .cast(JwtAuthenticationToken.class)
                 .map(auth -> {
+                    // JwtAuthenticationToken일 때만 실행
                     Jwt jwt = auth.getToken();
 
                     String userId = jwt.getSubject();
@@ -37,9 +38,9 @@ public class JwtHeaderRelayFilter implements GlobalFilter, Ordered {
                                 headers.remove("X-User-Roles");
                                 headers.remove("X-User-Email");
 
-                                headers.add("X-User-Id", userId);
-                                if(email != null) headers.add("X-User-Email", email);
-                                if(roles != null && !roles.isBlank()) headers.add("X-User-Roles", roles);
+                                headers.set("X-User-Id", userId);
+                                if(email != null) headers.set("X-User-Email", email);
+                                if(roles != null && !roles.isBlank()) headers.set("X-User-Roles", roles);
                             })
                             .build();
 
@@ -47,6 +48,7 @@ public class JwtHeaderRelayFilter implements GlobalFilter, Ordered {
                             .request(mutatedRequest)
                             .build();
                 })
+                // 타입이 다르거나 principal 이 없는 경우, 원본 요청 사용
                 .defaultIfEmpty(exchange)
                 .flatMap(chain::filter);
     }
