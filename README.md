@@ -10,4 +10,4 @@
 - Gateway에서는 인증된 사용자의 토큰을 받아, 헤더에 필요한 정보를 담고 라우팅합니다.
 
 ### 라우팅 경로
-- `src/resources/application.yml` 파일을 참고해주세요.
+- `src/main/resources/application.yml` 파일을 참고해주세요.
