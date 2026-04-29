@@ -37,9 +37,7 @@ public class SecurityConfig {
                 .authorizeExchange(exchange -> exchange
                         // 전역 인증 제외
                         .pathMatchers(
-                                "/realms/easymeal/protocol/openid-connect/token",
-                                "/realms/easymeal/protocol/openid-connect/certs",
-                                "/realms/easymeal/.well-known/openid-configuration",
+                                "/api/v1/users/signin",
                                 "/api/v1/users/signup/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"

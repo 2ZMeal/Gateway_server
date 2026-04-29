@@ -9,11 +9,6 @@ spring:
       server:
         webflux:
           routes:
-            - id: keycloak
-              uri: http://keycloak:8080
-              predicates:
-                - Path=/realms/easymeal/protocol/openid-connect/token, /realms/easymeal/protocol/openid-connect/certs, /realms/easymeal/.well-known/openid-configuration
-
             - id: user-service
               uri: lb://user-service
               predicates:
