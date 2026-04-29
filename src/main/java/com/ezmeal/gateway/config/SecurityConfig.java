@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/v1/companies/**").permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/v1/reviews").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/v1/reviews/*").permitAll()
                         // test시에 사용하는 api
                         .pathMatchers("/api/v1/test/anonymous").permitAll()
                         .pathMatchers("/api/v1/test/user").authenticated()
