@@ -12,7 +12,6 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-@EnableWebFluxSecurity
 @RequiredArgsConstructor
 public class SecurityErrorResponseWriter {
 
