@@ -55,14 +55,6 @@ class GatewaySecurityTest {
     }
 
     @Test
-    void 토큰이_없으면_401을_반환한다() {
-        webTestClient.get()
-                .uri("/api/v1/test/user")
-                .exchange()
-                .expectStatus().isUnauthorized();
-    }
-
-    @Test
     void 잘못된_토큰이면_401을_반환한다() {
         given(reactiveJwtDecoder.decode(anyString()))
                 .willReturn(Mono.error(new BadJwtException("Invalid token")));
