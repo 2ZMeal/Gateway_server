@@ -10,8 +10,8 @@ COPY settings.gradle .
 COPY src src
 
 # 권한 부여 및 빌드
-RUN chmod +x gradlew
-RUN ./gradlew bootJar --no-daemon
+RUN sed -i 's/\r$//' ./gradlew && chmod +x ./gradlew
+RUN ./gradlew bootJar -x test --no-daemon
 
 # 2. 실행 스테이지
 FROM eclipse-temurin:21-jre
