@@ -1,8 +1,9 @@
 package com.ezmeal.gateway.filter;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Component
 public class JwtHeaderRelayFilter implements GlobalFilter, Ordered {
 
@@ -26,11 +28,16 @@ public class JwtHeaderRelayFilter implements GlobalFilter, Ordered {
                 // JwtAuthenticationToken일 때만 실행
                 Jwt jwt = auth.getToken();
 
-                String userId = jwt.getClaimAsString("service_user_id");
+                String userId = claimToString(jwt.getClaims().get("service_user_id"));
                 String email = jwt.getClaimAsString("email");
                 String roles = extractRoles(jwt);
 
                 if (userId == null || userId.isBlank()) {
+                    log.warn(
+                        "JWT service_user_id claim is missing. subject={}, claimKeys={}",
+                        jwt.getSubject(),
+                        jwt.getClaims().keySet()
+                    );
                     exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                     return exchange.getResponse().setComplete();
                 }
@@ -59,6 +66,19 @@ public class JwtHeaderRelayFilter implements GlobalFilter, Ordered {
             .switchIfEmpty(chain.filter(exchange));
     }
 
+    private String claimToString(Object claim) {
+        if (claim == null) {
+            return null;
+        }
+        if (claim instanceof Collection<?> values) {
+            return values.stream()
+                .findFirst()
+                .map(Object::toString)
+                .orElse(null);
+        }
+        return claim.toString();
+    }
+
     // Extract Roles from Keycloak
     private String extractRoles(Jwt jwt) {
         Map<String, Object> realmAccess = jwt.getClaim("realm_access");
@@ -73,13 +93,26 @@ public class JwtHeaderRelayFilter implements GlobalFilter, Ordered {
             return "";
         }
 
-        return roles.stream()
+        List<String> serviceRoles = roles.stream()
             .map(Object::toString)
-            .collect(Collectors.joining(","));
+            .filter(role -> role.equals("ADMIN") || role.equals("COMPANY") || role.equals("USER"))
+            .toList();
+
+        if (serviceRoles.contains("ADMIN")) {
+            return "ADMIN";
+        }
+        if (serviceRoles.contains("COMPANY")) {
+            return "COMPANY";
+        }
+        if (serviceRoles.contains("USER")) {
+            return "USER";
+        }
+
+        return "";
     }
 
     @Override
     public int getOrder() {
-        return -1;
+        return 0;
     }
 }
