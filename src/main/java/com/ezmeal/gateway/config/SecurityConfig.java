@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -20,6 +21,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Configuration
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
@@ -60,8 +62,26 @@ public class SecurityConfig {
                 )
                 // handling exception
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((exchange, ex) -> writer.writeErrorResponse(exchange, ErrorCode.UNAUTHORIZED))
-                        .accessDeniedHandler((exchange, denied) -> writer.writeErrorResponse(exchange, ErrorCode.FORBIDDEN))
+                        .authenticationEntryPoint((exchange, ex) -> {
+                            log.warn(
+                                "Gateway authentication failed. method={}, path={}, message={}",
+                                exchange.getRequest().getMethod(),
+                                exchange.getRequest().getURI().getPath(),
+                                ex.getMessage(),
+                                ex
+                            );
+                            return writer.writeErrorResponse(exchange, ErrorCode.UNAUTHORIZED);
+                        })
+                        .accessDeniedHandler((exchange, denied) -> {
+                            log.warn(
+                                "Gateway access denied. method={}, path={}, message={}",
+                                exchange.getRequest().getMethod(),
+                                exchange.getRequest().getURI().getPath(),
+                                denied.getMessage(),
+                                denied
+                            );
+                            return writer.writeErrorResponse(exchange, ErrorCode.FORBIDDEN);
+                        })
                 )
                 .build();
     }
