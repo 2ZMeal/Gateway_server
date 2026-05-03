@@ -38,13 +38,13 @@ public class SecurityConfig {
                         // 전역 인증 제외
                         .pathMatchers(
                                 "/api/v1/users/signin",
-                                "/api/v1/users/signup/**",
+                                "/api/v1/users/signup",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
                         // 특정 도메인의 일부 api에 대한 인증 제외
-                        .pathMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
-                        .pathMatchers(HttpMethod.GET, "/api/v1/companies/**").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/v1/products").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/v1/companies").permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/v1/reviews").permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/v1/reviews/*").permitAll()
                         // test시에 사용하는 api

@@ -12,52 +12,52 @@ spring:
             - id: user-service
               uri: lb://user-service
               predicates:
-                - Path=/api/v1/users/**
+                - Path=/api/v1/users/**, /api/v1/users
 
             - id: company-service
               uri: lb://company-service
               predicates:
-                - Path=/api/v1/companies/**
+                - Path=/api/v1/companies/**, /api/v1/companies
 
             - id: product-service
               uri: lb://product-service
               predicates:
-                - Path=/api/v1/products/**
+                - Path=/api/v1/products/**, /api/v1/products
 
             - id: cart-service
               uri: lb://cart-service
               predicates:
-                - Path=/api/v1/carts/**
+                - Path=/api/v1/carts/**, /api/v1/carts
 
             - id: order-service
               uri: lb://order-service
               predicates:
-                - Path=/api/v1/orders/**
+                - Path=/api/v1/orders/**, /api/v1/orders
 
             - id: payment-service
               uri: lb://payment-service
               predicates:
-                - Path=/api/v1/payments/**
+                - Path=/api/v1/payments/**, /apiv/1/payments
 
             - id: shipment-service
               uri: lb://shipment-service
               predicates:
-                - Path=/api/v1/shipments/**
+                - Path=/api/v1/shipments/**, /api/v1/shipments
 
             - id: notification-service
               uri: lb://notification-service
               predicates:
-                - Path=/api/v1/notifications/**
+                - Path=/api/v1/notifications/**, /api/v1/notifications
 
             - id: review-service
               uri: lb://review-service
               predicates:
-                - Path=/api/v1/reviews/**
+                - Path=/api/v1/reviews/**, /api/v1/reviews
 
             - id: customer-service
               uri: lb://customer-service
               predicates:
-                - Path=/api/v1/cs/**
+                - Path=/api/v1/cs/**, /api/v1/cs
   security:
     oauth2:
       resourceserver:
