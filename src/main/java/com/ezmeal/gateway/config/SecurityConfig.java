@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .pathMatchers(
                                 "/api/v1/users/signin",
                                 "/api/v1/users/signup",
+                                "/actuator/health",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
