@@ -37,7 +37,7 @@ spring:
             - id: payment-service
               uri: lb://payment-service
               predicates:
-                - Path=/api/v1/payments/**, /apiv/1/payments
+                - Path=/api/v1/payments/**, /apiv/v1/payments
 
             - id: shipment-service
               uri: lb://shipment-service
@@ -80,8 +80,8 @@ management:
   tracing:
     sampling:
       probability: 1.0 # 운영 환경에서는 트래픽이 많은 수 있으므로 0.1, 0.05등으로 낮추는 것을 검토할 것
-    zipkin:
-      tracing:
+    export:
+      zipkin:
 #        endpoint: http://localhost:9411/api/v2/spans
         endpoint: http://zipkin:9411/api/v2/spans
 
