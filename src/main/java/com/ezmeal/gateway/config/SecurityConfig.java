@@ -42,6 +42,8 @@ public class SecurityConfig {
                                 "/api/v1/users/signin",
                                 "/api/v1/users/signup",
                                 "/actuator/health",
+                                "/actuator/prometheus",
+                                "/actuator/info",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
