@@ -76,7 +76,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, info
+        include: health, info, prometheus
   tracing:
     sampling:
       probability: 1.0 # 운영 환경에서는 트래픽이 많은 수 있으므로 0.1, 0.05등으로 낮추는 것을 검토할 것
