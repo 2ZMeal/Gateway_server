@@ -1,5 +1,6 @@
 package com.ezmeal.gateway.filter;
 
+import com.ezmeal.gateway.common.code.Role;
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -75,6 +76,11 @@ public class JwtHeaderRelayFilter implements GlobalFilter, Ordered {
 
         return roles.stream()
             .map(Object::toString)
+            .filter(role ->
+                role.equals(Role.USER.toString())
+                || role.equals(Role.ADMIN.toString())
+                || role.equals(Role.COMPANY.toString())
+            )
             .collect(Collectors.joining(","));
     }
 

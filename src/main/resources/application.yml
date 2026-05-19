@@ -12,56 +12,57 @@ spring:
             - id: user-service
               uri: lb://user-service
               predicates:
-                - Path=/api/v1/users/**
+                - Path=/api/v1/users/**, /api/v1/users
 
             - id: company-service
               uri: lb://company-service
               predicates:
-                - Path=/api/v1/companies/**
+                - Path=/api/v1/companies/**, /api/v1/companies
 
             - id: product-service
               uri: lb://product-service
               predicates:
-                - Path=/api/v1/products/**
+                - Path=/api/v1/products/**, /api/v1/products
 
             - id: cart-service
               uri: lb://cart-service
               predicates:
-                - Path=/api/v1/carts/**
+                - Path=/api/v1/carts/**, /api/v1/carts
 
             - id: order-service
               uri: lb://order-service
               predicates:
-                - Path=/api/v1/orders/**
+                - Path=/api/v1/orders/**, /api/v1/orders
 
             - id: payment-service
               uri: lb://payment-service
               predicates:
-                - Path=/api/v1/payments/**
+                - Path=/api/v1/payments/**, /api/v1/payments
 
             - id: shipment-service
               uri: lb://shipment-service
               predicates:
-                - Path=/api/v1/shipments/**
+                - Path=/api/v1/shipments/**, /api/v1/shipments
 
             - id: notification-service
               uri: lb://notification-service
               predicates:
-                - Path=/api/v1/notifications/**
+                - Path=/api/v1/notifications/**, /api/v1/notifications
 
             - id: review-service
               uri: lb://review-service
               predicates:
-                - Path=/api/v1/reviews/**
+                - Path=/api/v1/reviews/**, /api/v1/reviews
 
             - id: customer-service
               uri: lb://customer-service
               predicates:
-                - Path=/api/v1/cs/**
+                - Path=/api/v1/cs/**, /api/v1/cs
   security:
     oauth2:
       resourceserver:
         jwt:
+#          issuer-uri: http://localhost:8180/realms/easymeal
           issuer-uri: http://keycloak:8080/realms/easymeal
 
 eureka:
@@ -75,4 +76,16 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, info
+        include: health, info, prometheus
+  tracing:
+    sampling:
+      probability: 1.0 # 운영 환경에서는 트래픽이 많은 수 있으므로 0.1, 0.05등으로 낮추는 것을 검토할 것
+
+  zipkin:
+    tracing:
+#        endpoint: http://localhost:9411/api/v2/spans
+      endpoint: http://zipkin:9411/api/v2/spans
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:}, traceId=%X{traceId:-}, spanId=%X{spanId:-}]"
