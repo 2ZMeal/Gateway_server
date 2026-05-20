@@ -54,6 +54,10 @@ public class SecurityConfig {
                     "/actuator/prometheus",
                     "/actuator/info"
                 ).permitAll()
+                // PG사로부터의 응답 수신을 위한 인증 제외 api
+                .pathMatchers(
+                    HttpMethod.POST,"/api/v1/payments/confirm"
+                ).permitAll()
                 // 특정 도메인의 일부 api에 대한 인증 제외
                 .pathMatchers(HttpMethod.GET, "/api/v1/products").permitAll()
                 .pathMatchers(HttpMethod.GET, "/api/v1/companies").permitAll()
